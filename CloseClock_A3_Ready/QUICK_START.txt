@@ -1,0 +1,21 @@
+CLOSECLOCK ASSIGNMENT 3 — START HERE
+
+1. Supabase.com > New project > SQL Editor > paste supabase_setup.sql > Run.
+2. Supabase Project Settings > API: copy Project URL and SERVICE ROLE secret.
+   Never put the service role secret in src/ or commit it to GitHub.
+3. Get Firebase project ID from Firebase console > Project settings > General.
+4. Create .env in project root using .env.example (do NOT upload/share .env).
+5. VS Code terminal A: npm install ; npm run dev
+6. VS Code terminal B: python -m venv .venv
+   Windows: .\.venv\Scripts\python.exe -m pip install -r requirements.txt
+   Windows: .\.venv\Scripts\python.exe -m uvicorn api.index:app --reload --port 8000
+   If uvicorn missing: run .\.venv\Scripts\python.exe -m pip install uvicorn
+7. Open localhost:5173, sign in, add a task, refresh, check Supabase Table Editor.
+8. GitHub: commit project excluding .env and node_modules.
+9. Vercel: import repo, Vite build framework, build npm run build, output dist.
+   Add Supabase URL, server service role key and FIREBASE_PROJECT_ID under environment variables.
+   Check https://YOUR-SITE.vercel.app/api/health and real task flows.
+10. Record video and document real development prompts. Three peer reviews still needed.
+
+SECURITY: Keep service role secret server-only. Do not show in screenshots or video.
+Old Firebase tasks do not automatically migrate; newly created tasks use Supabase.

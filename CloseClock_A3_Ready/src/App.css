@@ -1,0 +1,1091 @@
+/* =========================================
+   GLOBAL RESET
+========================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+
+html,
+body,
+#root {
+
+  width:100%;
+  min-height:100%;
+
+  margin:0;
+  padding:0;
+
+}
+
+
+body {
+
+  font-family:
+  Inter,
+  Arial,
+  sans-serif;
+
+  background:#f8fafc;
+
+  color:#0f172a;
+
+}
+
+
+
+/* =========================================
+   APP
+========================================= */
+
+
+.App {
+
+  width:100%;
+
+  min-height:100vh;
+
+}
+
+
+
+
+
+/* =========================================
+ PREMIUM ROOT
+========================================= */
+
+
+.premium-dashboard-root {
+
+  min-height:100vh;
+
+  width:100%;
+
+  background:
+  linear-gradient(
+    135deg,
+    #f8fafc,
+    #eef2ff
+  );
+
+}
+
+
+
+
+
+
+/* =========================================
+ NAVIGATION
+========================================= */
+
+
+.nav-bar {
+
+width:100%;
+
+height:70px;
+
+display:flex;
+
+align-items:center;
+
+justify-content:space-between;
+
+padding:0 50px;
+
+background:
+linear-gradient(
+90deg,
+#1e3a8a,
+#2563eb
+);
+
+color:white;
+
+box-shadow:
+0 5px 20px rgba(0,0,0,.12);
+
+}
+
+
+
+.nav-brand {
+
+font-size:24px;
+
+font-weight:800;
+
+}
+
+
+
+.nav-links {
+
+display:flex;
+
+gap:30px;
+
+}
+
+
+
+.nav-link {
+
+color:#dbeafe;
+
+text-decoration:none;
+
+font-weight:600;
+
+}
+
+
+
+.nav-link:hover {
+
+color:white;
+
+}
+
+
+
+.nav-user {
+
+display:flex;
+
+align-items:center;
+
+gap:15px;
+
+}
+
+
+
+.nav-logout-btn {
+
+background:white;
+
+color:#2563eb;
+
+padding:9px 18px;
+
+border-radius:10px;
+
+border:none;
+
+font-weight:700;
+
+cursor:pointer;
+
+}
+
+
+
+
+
+
+
+
+/* =========================================
+ HERO
+========================================= */
+
+
+.hero-section {
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+padding:60px 7%;
+
+}
+
+
+
+.hero-title {
+
+font-size:44px;
+
+font-weight:900;
+
+margin:0;
+
+}
+
+
+
+.hero-summary {
+
+margin-top:15px;
+
+font-size:18px;
+
+color:#475569;
+
+}
+
+
+
+.hero-cta {
+
+display:inline-block;
+
+margin-top:25px;
+
+padding:14px 30px;
+
+background:#2563eb;
+
+color:white;
+
+border-radius:12px;
+
+text-decoration:none;
+
+font-weight:700;
+
+}
+
+
+
+.hero-icon {
+
+font-size:90px;
+
+}
+
+
+
+
+
+
+
+/* =========================================
+ GRID
+========================================= */
+
+
+.premium-dashboard-grid {
+
+display:grid;
+
+grid-template-columns:
+
+minmax(0,1fr)
+
+380px;
+
+gap:35px;
+
+padding:20px 6% 60px;
+
+}
+
+
+
+.premium-maincol {
+
+display:flex;
+
+flex-direction:column;
+
+gap:30px;
+
+}
+
+
+
+.premium-sidecar {
+
+display:flex;
+
+flex-direction:column;
+
+gap:30px;
+
+}
+
+
+
+
+
+/* =========================================
+ PANELS
+========================================= */
+
+
+.premium-cards-panel,
+.premium-analytics-panel,
+.premium-form-panel,
+.premium-tasklist-panel {
+
+
+background:white;
+
+border-radius:22px;
+
+padding:30px;
+
+box-shadow:
+
+0 10px 35px rgba(15,23,42,.08);
+
+
+}
+
+
+
+
+
+
+
+/* =========================================
+ DASHBOARD CARDS
+========================================= */
+
+
+.dashboard-stats-grid {
+
+display:grid;
+
+grid-template-columns:repeat(5,1fr);
+
+gap:20px;
+
+}
+
+
+
+.dashboard-stat-card {
+
+background:white;
+
+padding:22px;
+
+border-radius:20px;
+
+display:flex;
+
+align-items:center;
+
+gap:15px;
+
+box-shadow:
+
+0 10px 30px rgba(15,23,42,.08);
+
+transition:.25s;
+
+}
+
+
+
+.dashboard-stat-card:hover {
+
+transform:translateY(-5px);
+
+}
+
+
+
+.stat-icon {
+
+font-size:36px;
+
+}
+
+
+.stat-title {
+
+margin:0;
+
+font-size:14px;
+
+color:#64748b;
+
+font-weight:600;
+
+}
+
+
+
+.stat-value {
+
+margin:5px 0 0;
+
+font-size:30px;
+
+font-weight:900;
+
+}
+
+
+
+.dashboard-stat-card.total {
+
+border-left:5px solid #2563eb;
+
+}
+
+.dashboard-stat-card.completed {
+
+border-left:5px solid #16a34a;
+
+}
+
+.dashboard-stat-card.pending {
+
+border-left:5px solid #f59e0b;
+
+}
+
+.dashboard-stat-card.overdue {
+
+border-left:5px solid #dc2626;
+
+}
+
+.dashboard-stat-card.productivity {
+
+border-left:5px solid #7c3aed;
+
+}
+
+
+
+
+
+
+/* =========================================
+ TASK FORM MODERN
+========================================= */
+
+
+.task-form-modern {
+
+
+background:white;
+
+padding:35px;
+
+border-radius:24px;
+
+box-shadow:
+
+0 12px 35px rgba(15,23,42,.08);
+
+}
+
+
+
+.form-header {
+
+text-align:center;
+
+margin-bottom:30px;
+
+}
+
+
+
+.form-header h2 {
+
+margin:0;
+
+font-size:26px;
+
+font-weight:900;
+
+}
+
+
+
+.form-header p {
+
+color:#64748b;
+
+}
+
+
+
+.form-grid {
+
+display:grid;
+
+grid-template-columns:repeat(2,1fr);
+
+gap:22px;
+
+}
+
+
+
+.form-group {
+
+display:flex;
+
+flex-direction:column;
+
+gap:8px;
+
+}
+
+
+
+.form-group label {
+
+font-size:14px;
+
+font-weight:700;
+
+color:#334155;
+
+}
+
+
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+
+width:100%;
+
+padding:12px 15px;
+
+border-radius:12px;
+
+border:1px solid #cbd5e1;
+
+outline:none;
+
+}
+
+
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+
+border-color:#2563eb;
+
+box-shadow:
+
+0 0 0 3px rgba(37,99,235,.15);
+
+}
+
+
+
+.full-width {
+
+grid-column:1/-1;
+
+}
+
+
+
+.create-task-btn {
+
+margin-top:30px;
+
+width:100%;
+
+padding:14px;
+
+border-radius:14px;
+
+font-weight:800;
+
+font-size:16px;
+
+background:
+
+linear-gradient(
+90deg,
+#2563eb,
+#6366f1
+);
+
+}
+
+
+
+
+
+
+
+/* =========================================
+ MODERN TASK CARD
+========================================= */
+
+
+.task-list {
+
+display:flex;
+
+flex-direction:column;
+
+gap:18px;
+
+}
+
+
+
+.task-card-modern {
+
+background:white;
+
+border-radius:22px;
+
+padding:25px;
+
+box-shadow:
+
+0 10px 30px rgba(15,23,42,.08);
+
+border-left:5px solid #2563eb;
+
+transition:.25s;
+
+}
+
+
+
+.task-card-modern:hover {
+
+transform:translateY(-4px);
+
+}
+
+
+
+.task-card-modern.completed {
+
+border-left-color:#16a34a;
+
+opacity:.75;
+
+}
+
+
+
+
+.card-main-row {
+
+display:flex;
+
+align-items:center;
+
+justify-content:space-between;
+
+gap:20px;
+
+}
+
+
+
+.task-main-col {
+
+display:flex;
+
+align-items:center;
+
+gap:15px;
+
+flex:1;
+
+}
+
+
+
+
+.custom-checkbox input {
+
+width:22px;
+
+height:22px;
+
+accent-color:#2563eb;
+
+}
+
+
+
+
+.taskcard-title {
+
+font-size:20px;
+
+font-weight:800;
+
+}
+
+
+
+.taskcard-desc {
+
+margin-top:8px;
+
+color:#64748b;
+
+}
+
+
+
+
+.task-badges-row {
+
+display:flex;
+
+gap:10px;
+
+margin-top:15px;
+
+flex-wrap:wrap;
+
+}
+
+
+
+.badge {
+
+padding:6px 14px;
+
+border-radius:20px;
+
+font-size:12px;
+
+font-weight:700;
+
+}
+
+
+
+.badge-priority-high {
+
+background:#fee2e2;
+
+color:#dc2626;
+
+}
+
+
+
+.badge-priority-medium {
+
+background:#fef3c7;
+
+color:#b45309;
+
+}
+
+
+
+.badge-priority-low {
+
+background:#dcfce7;
+
+color:#15803d;
+
+}
+
+
+
+.badge-category {
+
+background:#e0e7ff;
+
+color:#3730a3;
+
+}
+
+
+
+.badge-deadline {
+
+background:#dbeafe;
+
+color:#1d4ed8;
+
+}
+
+
+
+.badge-overdue {
+
+background:#fee2e2;
+
+color:#dc2626;
+
+}
+
+
+
+.badge-completed {
+
+background:#dcfce7;
+
+color:#15803d;
+
+}
+
+
+
+
+
+.task-actions-col {
+
+display:flex;
+
+gap:10px;
+
+}
+
+
+
+.task-actions-col button {
+
+width:42px;
+
+height:42px;
+
+border-radius:12px;
+
+}
+
+
+
+
+
+.edit-btn {
+
+background:#2563eb;
+
+}
+
+
+
+.delete-btn {
+
+background:#dc2626;
+
+}
+
+
+
+
+
+
+
+/* =========================================
+ ANALYTICS
+========================================= */
+
+
+.analytics-card {
+
+background:white;
+
+padding:25px;
+
+border-radius:18px;
+
+box-shadow:
+
+0 8px 25px rgba(0,0,0,.08);
+
+}
+
+
+
+.progress-bar {
+
+height:12px;
+
+background:#e2e8f0;
+
+border-radius:20px;
+
+overflow:hidden;
+
+}
+
+
+
+.progress-fill {
+
+height:100%;
+
+background:#2563eb;
+
+}
+
+
+
+
+
+
+
+/* =========================================
+ TIMER
+========================================= */
+
+
+.timer {
+
+background:white;
+
+padding:30px;
+
+border-radius:20px;
+
+box-shadow:
+
+0 8px 25px rgba(0,0,0,.08);
+
+}
+
+
+
+
+
+
+
+button {
+
+background:#2563eb;
+
+color:white;
+
+border:none;
+
+padding:10px 18px;
+
+border-radius:10px;
+
+cursor:pointer;
+
+font-weight:600;
+
+}
+
+
+
+button:hover {
+
+transform:translateY(-2px);
+
+}
+
+
+
+
+
+
+
+/* =========================================
+ RESPONSIVE
+========================================= */
+
+
+@media(max-width:1200px){
+
+
+.dashboard-stats-grid {
+
+grid-template-columns:repeat(3,1fr);
+
+}
+
+
+}
+
+
+
+@media(max-width:1100px){
+
+
+.premium-dashboard-grid {
+
+grid-template-columns:1fr;
+
+}
+
+
+
+.hero-section {
+
+flex-direction:column;
+
+align-items:flex-start;
+
+}
+
+
+
+}
+
+
+
+
+@media(max-width:700px){
+
+
+.nav-bar {
+
+padding:0 20px;
+
+}
+
+
+.hero-title {
+
+font-size:32px;
+
+}
+
+
+.dashboard-stats-grid {
+
+grid-template-columns:1fr;
+
+}
+
+
+.form-grid {
+
+grid-template-columns:1fr;
+
+}
+
+
+.card-main-row {
+
+flex-direction:column;
+
+align-items:flex-start;
+
+}
+
+
+.task-actions-col {
+
+width:100%;
+
+}
+
+
+.task-actions-col button {
+
+flex:1;
+
+}
+
+
+}
