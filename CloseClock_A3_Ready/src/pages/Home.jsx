@@ -3,22 +3,6 @@ import "../App.css";
 
 import { auth } from "../firebase";
 
-async function apiRequest(path, options = {}) {
-  const token = await auth.currentUser?.getIdToken();
-  if (!token) throw new Error("Please log in again.");
-  const response = await fetch(`/api/tasks${path}`, {
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-      ...options.headers,
-    },
-  });
-  const data = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error(data.detail || "Unable to contact the server");
-  return data;
-}
-
 import DashboardCards from "../components/DashboardCards";
 import ProfessionalStatsCard from "../components/ProfessionalStatsCard";
 import TaskForm from "../components/TaskForm";
@@ -32,7 +16,83 @@ import Navigation from "../components/Navigation";
 
 
 
+// ===============================
+// API CONNECTION
+// React -> FastAPI -> Supabase
+// ===============================
+
+
+async function apiRequest(path, options = {}) {
+
+
+const token = await auth.currentUser?.getIdToken();
+
+
+if (!token) {
+
+throw new Error("Please log in again.");
+
+}
+
+
+
+const response = await fetch(
+
+`http://127.0.0.1:8000/api/tasks${path}`,
+
+{
+
+...options,
+
+
+headers:{
+
+"Content-Type":"application/json",
+
+"Authorization":`Bearer ${token}`,
+
+...options.headers,
+
+}
+
+}
+
+);
+
+
+
+const data = await response
+.json()
+.catch(()=>({}));
+
+
+
+
+if(!response.ok){
+
+throw new Error(
+
+data.detail || "Unable to contact the server"
+
+);
+
+}
+
+
+
+return data;
+
+
+}
+
+
+
+
+
+
+
 function Home({user, logout}) {
+
 
 
 const [tasks,setTasks] = useState([]);
@@ -51,18 +111,49 @@ const [loading,setLoading] = useState(false);
 
 
 
-// PRODUCTIVITY SCORE
+
+
 
 const productivity =
+
 tasks.length === 0
-? 0
-: Math.round(
-(tasks.filter(task => task.completed).length / tasks.length) * 100
+
+?
+
+0
+
+:
+
+Math.round(
+
+(
+
+tasks.filter(
+
+item=>item.completed
+
+).length
+
+/
+
+tasks.length
+
+)
+
+*
+
+100
+
 );
 
 
 
+
+
+
+
 useEffect(()=>{
+
 
 if(user){
 
@@ -70,70 +161,505 @@ loadTasks();
 
 }
 
+
 },[user]);
 
 
 
 
 
-// TASK DATA: React -> Python API -> Supabase
-const loadTasks = async () => {
-  try { setTasks(await apiRequest("")); }
-  catch (error) { console.error(error); alert("Unable to load tasks: " + error.message); }
+
+
+const loadTasks = async()=>{
+
+
+try{
+
+
+const data = await apiRequest("");
+
+
+setTasks(data);
+
+
+
+}
+
+
+catch(error){
+
+
+console.error(error);
+
+
+alert(
+
+"Unable to load tasks. Please try again."
+
+);
+
+
+}
+
+
+
 };
 
-const clearForm = () => {
-  setTask(""); setDeadline(""); setPriority("Medium");
-  setCategory("Study"); setEditingId(null);
+
+
+
+
+
+
+
+const clearForm = ()=>{
+
+
+setTask("");
+
+setDeadline("");
+
+setPriority("Medium");
+
+setCategory("Study");
+
+setEditingId(null);
+
+
 };
 
-const addTask = async () => {
-  if (!task.trim()) return alert("Enter task");
-  try {
-    setLoading(true);
-    const created = await apiRequest("", {
-      method: "POST",
-      body: JSON.stringify({ text: task.trim(), priority, category, deadline: deadline || null }),
-    });
-    setTasks(prev => [...prev, created]);
-    clearForm();
-  } catch (error) { console.error(error); alert("Task could not be added: " + error.message); }
-  finally { setLoading(false); }
+
+
+
+
+
+
+
+const addTask = async()=>{
+
+
+if(!task.trim()){
+
+
+alert(
+
+"Please enter a task name before submitting."
+
+);
+
+
+return;
+
+
+}
+
+
+
+
+
+try{
+
+
+setLoading(true);
+
+
+
+const created = await apiRequest(
+
+"",
+
+{
+
+method:"POST",
+
+
+body:JSON.stringify({
+
+
+text:task.trim(),
+
+priority,
+
+category,
+
+deadline:deadline || null
+
+
+})
+
+
+}
+
+
+);
+
+
+
+
+
+setTasks(
+
+previous=>[
+
+...previous,
+
+created
+
+]
+
+);
+
+
+
+clearForm();
+
+
+
+}
+
+
+catch(error){
+
+
+console.error(error);
+
+
+alert(
+
+"Task could not be added: "
+
++
+
+error.message
+
+);
+
+
+}
+
+
+finally{
+
+
+setLoading(false);
+
+
+}
+
+
 };
 
-const completeTask = async (id) => {
-  try {
-    const changed = await apiRequest(`/${id}`, {method:"PATCH", body: JSON.stringify({completed:true})});
-    setTasks(prev => prev.map(item => item.id === id ? changed : item));
-  } catch (error) { console.error(error); alert("Unable to complete task: " + error.message); }
+
+
+
+
+
+
+const completeTask = async(id)=>{
+
+
+try{
+
+
+const changed = await apiRequest(
+
+`/${id}`,
+
+{
+
+method:"PATCH",
+
+
+body:JSON.stringify({
+
+completed:true
+
+})
+
+
+}
+
+
+);
+
+
+
+
+
+setTasks(
+
+previous=>
+
+previous.map(
+
+item=>
+
+item.id===id
+
+?
+
+changed
+
+:
+
+item
+
+)
+
+);
+
+
+
+}
+
+
+catch(error){
+
+
+alert(
+
+"Unable to complete task: "
+
++
+
+error.message
+
+);
+
+
+}
+
+
 };
 
-const deleteTask = async (id) => {
-  try {
-    await apiRequest(`/${id}`, { method: "DELETE" });
-    setTasks(prev => prev.filter(item => item.id !== id));
-  } catch (error) { console.error(error); alert("Unable to delete task: " + error.message); }
+
+
+
+
+
+// DELETE TASK
+const deleteTask = async(id)=>{
+
+
+try{
+
+
+await apiRequest(
+
+`/${id}`,
+
+{
+
+method:"DELETE"
+
+}
+
+);
+
+
+
+setTasks(
+
+previous=>
+
+previous.filter(
+
+item=>item.id!==id
+
+)
+
+);
+
+
+}
+
+catch(error){
+
+
+alert(
+
+"Unable to delete task: "
+
++
+
+error.message
+
+);
+
+
+}
+
+
 };
 
-const editTask = (item) => {
-  setEditingId(item.id); setTask(item.text); setPriority(item.priority);
-  setCategory(item.category); setDeadline(item.deadline || "");
+
+
+
+
+
+
+
+// EDIT TASK
+
+const editTask = (item)=>{
+
+
+setEditingId(item.id);
+
+setTask(item.text);
+
+setPriority(item.priority);
+
+setCategory(item.category);
+
+setDeadline(
+
+item.deadline || ""
+
+);
+
+
 };
 
-const updateTask = async () => {
-  if (!task.trim()) return alert("Enter task");
-  try {
-    const changed = await apiRequest(`/${editingId}`, {
-      method: "PATCH", body: JSON.stringify({text:task.trim(), priority, category, deadline:deadline || null}),
-    });
-    setTasks(prev => prev.map(item => item.id === editingId ? changed : item));
-    clearForm();
-  } catch (error) { console.error(error); alert("Unable to update task: " + error.message); }
+
+
+
+
+
+
+
+// UPDATE TASK
+
+const updateTask = async()=>{
+
+
+if(!task.trim()){
+
+
+alert(
+
+"Please enter a task name before updating."
+
+);
+
+
+return;
+
+
+}
+
+
+
+
+try{
+
+
+setLoading(true);
+
+
+
+const changed = await apiRequest(
+
+`/${editingId}`,
+
+{
+
+method:"PATCH",
+
+body:JSON.stringify({
+
+text:task.trim(),
+
+priority,
+
+category,
+
+deadline:deadline || null
+
+})
+
+}
+
+
+);
+
+
+
+
+
+setTasks(
+
+previous=>
+
+previous.map(
+
+item=>
+
+item.id===editingId
+
+?
+
+changed
+
+:
+
+item
+
+)
+
+);
+
+
+
+
+clearForm();
+
+
+
+}
+
+
+catch(error){
+
+
+alert(
+
+"Unable to update task: "
+
++
+
+error.message
+
+);
+
+
+}
+
+
+finally{
+
+
+setLoading(false);
+
+
+}
+
+
 };
+
+
+
+
+
+
+
 
 return (
 
-<div className="premium-dashboard-root">
+<div 
+className="premium-dashboard-root"
+id="dashboard"
+>
 
 
 
@@ -157,19 +683,32 @@ onLogout={logout}
 
 <h1 className="hero-title">
 
-Welcome back{user?.email ? `, ${user.email}` : ""}!
+
+Welcome back
+
+{user?.email ? `, ${user.email}` : ""}! 👋
+
 
 </h1>
 
 
 
+
 <p className="hero-summary">
 
-Stay on top of your goals with your personal productivity assistant.
+
+Manage your daily tasks, track deadlines,
+
+and improve productivity through organised planning.
+
 
 <br/>
 
-Plan, analyze, and accomplish more professionally.
+
+CloseClock helps you focus, analyse performance,
+
+and achieve your goals efficiently.
+
 
 </p>
 
@@ -196,13 +735,16 @@ className="hero-cta"
 
 
 
+
 <div className="hero-graphic">
+
 
 <span className="hero-icon">
 
 🚀
 
 </span>
+
 
 </div>
 
@@ -218,8 +760,9 @@ className="hero-cta"
 
 
 
-
 <div className="premium-dashboard-grid">
+
+
 
 
 
@@ -230,28 +773,41 @@ className="hero-cta"
 
 
 
+
+
 <section className="premium-cards-panel">
+
 
 
 <ProfessionalStatsCard
 
+
 icon="📈"
+
 
 title="Productivity Score"
 
+
 value={`${productivity}%`}
+
 
 caption="Overall task completion performance"
 
+
 />
+
+
 
 
 
 <DashboardCards
 
+
 tasks={tasks}
 
+
 />
+
 
 
 </section>
@@ -264,14 +820,25 @@ tasks={tasks}
 
 
 
-<section className="premium-analytics-panel">
+
+<section 
+
+className="premium-analytics-panel"
+
+id="analytics"
+
+
+>
 
 
 <ProductivityAnalytics
 
+
 tasks={tasks}
 
+
 />
+
 
 
 </section>
@@ -293,31 +860,44 @@ id="taskform"
 >
 
 
+
 <TaskForm
 
 
 
 task={task}
 
+
 setTask={setTask}
+
+
 
 
 
 priority={priority}
 
+
 setPriority={setPriority}
+
+
 
 
 
 category={category}
 
+
 setCategory={setCategory}
+
+
 
 
 
 deadline={deadline}
 
+
 setDeadline={setDeadline}
+
+
 
 
 
@@ -337,7 +917,24 @@ addTask
 
 
 
+
+
+isEditing={
+
+editingId !== null
+
+}
+
+
+
+
+
+loading={loading}
+
+
 />
+
+
 
 
 </section>
@@ -353,11 +950,15 @@ addTask
 <section className="premium-tasklist-panel">
 
 
+
 <h2>
 
 Your Tasks
 
 </h2>
+
+
+
 
 
 
@@ -370,6 +971,7 @@ tasks.length===0
 
 <div className="empty-state-card">
 
+
 <h3>
 
 📂 No tasks yet
@@ -377,9 +979,10 @@ tasks.length===0
 </h3>
 
 
+
 <p>
 
-Add your first task to get started!
+Create your first task and start tracking your productivity journey.
 
 </p>
 
@@ -388,11 +991,12 @@ Add your first task to get started!
 
 
 
+
+
 :
 
-
-
 <div className="task-list">
+
 
 
 {
@@ -400,17 +1004,26 @@ Add your first task to get started!
 tasks.map(item=>(
 
 
+
 <TaskCard
+
 
 key={item.id}
 
+
 item={item}
+
+
 
 completeTask={completeTask}
 
+
 deleteTask={deleteTask}
 
+
 editTask={editTask}
+
+
 
 />
 
@@ -423,11 +1036,15 @@ editTask={editTask}
 
 
 
+
 </div>
 
 
 
 }
+
+
+
 
 
 
@@ -439,8 +1056,9 @@ editTask={editTask}
 
 
 
-
 </div>
+
+
 
 
 
@@ -453,9 +1071,13 @@ editTask={editTask}
 
 
 
+
+
 <UpcomingDeadlines
 
+
 tasks={tasks}
+
 
 />
 
@@ -463,7 +1085,9 @@ tasks={tasks}
 
 
 
+
 <Calendar />
+
 
 
 
@@ -490,9 +1114,7 @@ tasks={tasks}
 
 
 
-
 </div>
-
 
 );
 

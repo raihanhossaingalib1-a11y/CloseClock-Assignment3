@@ -6,9 +6,17 @@ function getDeadlineStatus(deadline, completed) {
   if (!deadline) return "";
 
 
+  if (completed)
+    return "Completed";
+
+
   const today = new Date();
+  today.setHours(0,0,0,0);
+
 
   const due = new Date(deadline);
+  due.setHours(0,0,0,0);
+
 
 
   const diff = Math.ceil(
@@ -17,25 +25,24 @@ function getDeadlineStatus(deadline, completed) {
   );
 
 
-  if (completed)
-    return "Completed";
-
 
   if (diff < 0)
     return "Overdue";
 
 
   if (diff === 0)
-    return "Today";
+    return "Due Today";
 
 
   if (diff === 1)
-    return "Tomorrow";
+    return "Due Tomorrow";
 
 
   return `Due in ${diff} days`;
 
 }
+
+
 
 
 
@@ -47,6 +54,7 @@ deleteTask,
 editTask
 
 }) {
+
 
 
 const deadlineStatus =
@@ -62,9 +70,12 @@ deadlineStatus === "Overdue";
 
 
 
+
+
 return (
 
 <div
+
 className={`task-card-modern ${
 item.completed ? "completed" : ""
 }`}
@@ -72,7 +83,12 @@ item.completed ? "completed" : ""
 >
 
 
+
 <div className="task-header-modern">
+
+
+
+
 
 
 <div className="task-check-area">
@@ -83,6 +99,8 @@ item.completed ? "completed" : ""
 type="checkbox"
 
 checked={item.completed}
+
+disabled={item.completed}
 
 onChange={() =>
 completeTask(item.id)
@@ -95,14 +113,23 @@ completeTask(item.id)
 
 
 
+
+
+
+
 <div className="task-content-modern">
+
 
 
 <h3>
 
 {item.text}
 
+{item.completed && " ✅"}
+
 </h3>
+
+
 
 
 
@@ -118,34 +145,51 @@ completeTask(item.id)
 
 
 
+
+
+
+
 <div className="task-meta">
 
 
+
 <span
+
 className={`priority-pill ${item.priority.toLowerCase()}`}
+
 >
 
-{item.priority}
+Priority: {item.priority}
 
 </span>
+
+
+
 
 
 
 <span className="category-pill">
 
-{item.category}
+Category: {item.category}
 
 </span>
 
 
 
+
+
+
+
 {
+
 item.deadline &&
 
 <span
+
 className={`deadline-pill ${
 isOverdue ? "overdue" : ""
 }`}
+
 >
 
 📅 {deadlineStatus}
@@ -155,15 +199,32 @@ isOverdue ? "overdue" : ""
 }
 
 
+
+
+
 </div>
 
 
+
+
+
 </div>
+
+
+
+
 
 
 
 <div className="task-action-modern">
 
+
+
+
+
+{
+
+!item.completed &&
 
 <button
 
@@ -175,9 +236,15 @@ editTask(item)
 
 >
 
-✏️
+✏️ Edit
 
 </button>
+
+}
+
+
+
+
 
 
 
@@ -191,18 +258,29 @@ deleteTask(item.id)
 
 >
 
-🗑️
+🗑️ Delete
 
 </button>
 
 
-</div>
+
+
 
 
 </div>
 
 
+
+
+
+
+
 </div>
+
+
+
+</div>
+
 
 );
 

@@ -20,16 +20,19 @@ Math.round(
 
 
 
+
 const high =
 tasks.filter(
 task=>task.priority==="High"
 ).length;
 
 
+
 const medium =
 tasks.filter(
 task=>task.priority==="Medium"
 ).length;
+
 
 
 const low =
@@ -40,16 +43,19 @@ task=>task.priority==="Low"
 
 
 
+
 const study =
 tasks.filter(
 task=>task.category==="Study"
 ).length;
 
 
+
 const work =
 tasks.filter(
 task=>task.category==="Work"
 ).length;
+
 
 
 const personal =
@@ -61,30 +67,83 @@ task=>task.category==="Personal"
 
 
 
+
+// PRODUCTIVITY MESSAGE
+
+let message = "";
+
+if(productivity === 0){
+
+message =
+"Start completing tasks to build your productivity score.";
+
+}
+else if(productivity < 50){
+
+message =
+"Good start! Keep completing tasks to improve your productivity.";
+
+}
+else if(productivity < 80){
+
+message =
+"Great progress! You are maintaining a productive workflow.";
+
+}
+else{
+
+message =
+"Excellent performance! You are highly productive.";
+
+}
+
+
+
+
+
 return(
 
 <div className="analytics-card">
 
 
+
 <h2>
-Productivity Analytics
+📊 Productivity Analytics
 </h2>
 
 
 
+<p className="analytics-description">
+
+Track your progress, completion rate, priorities,
+and task distribution in one place.
+
+</p>
+
+
+
+
+
+
+
 <div className="analytics-item">
+
 
 <h4>
 Completion Rate
 </h4>
 
 
+
 <p>
-{completed} / {total} Tasks
+{completed} / {total} Tasks Completed
 </p>
 
 
+
+
 <div className="progress-bar">
+
 
 <div
 
@@ -98,15 +157,33 @@ width:`${productivity}%`
 
 </div>
 
+
 </div>
+
+
 
 
 <p>
+
 {productivity}% Complete
+
 </p>
 
 
+
+<p className="productivity-message">
+
+💡 {message}
+
+</p>
+
+
+
 </div>
+
+
+
+
 
 
 
@@ -114,27 +191,33 @@ width:`${productivity}%`
 
 <div className="analytics-item">
 
+
 <h4>
 Priority Breakdown
 </h4>
 
 
+
 <p>
-🔴 High : {high}
+🔴 High Priority : {high}
 </p>
 
 
 <p>
-🟡 Medium : {medium}
+🟡 Medium Priority : {medium}
 </p>
 
 
 <p>
-🟢 Low : {low}
+🟢 Low Priority : {low}
 </p>
+
 
 
 </div>
+
+
+
 
 
 
@@ -149,22 +232,26 @@ Category Breakdown
 </h4>
 
 
+
 <p>
-📚 Study : {study}
+📚 Study Tasks : {study}
 </p>
 
 
 <p>
-💼 Work : {work}
+💼 Work Tasks : {work}
 </p>
 
 
 <p>
-🏠 Personal : {personal}
+🏠 Personal Tasks : {personal}
 </p>
+
 
 
 </div>
+
+
 
 
 
