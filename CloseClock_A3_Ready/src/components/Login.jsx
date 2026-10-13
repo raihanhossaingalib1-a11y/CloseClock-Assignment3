@@ -1,28 +1,28 @@
 import { useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 
-function Login({setShowSignup}){
+function Login({setUser, switchSignup}) {
 
 
-const [email,setEmail]=useState("");
-const [password,setPassword]=useState("");
+const [email,setEmail] = useState("");
+const [password,setPassword] = useState("");
 
 
 
-const login = async(e)=>{
-
-e.preventDefault();
-
+const login = async()=>{
 
 try{
 
-await signInWithEmailAndPassword(
-auth,
-email,
-password
+const result = await signInWithEmailAndPassword(
+    auth,
+    email,
+    password
 );
+
+
+setUser(result.user);
 
 
 }
@@ -33,32 +33,45 @@ alert(error.message);
 
 }
 
-
 };
 
 
 
+return (
+
+<div className="login-page">
 
 
-return(
-
-<div className="login-container">
+<div className="login-card">
 
 
-<h2>
-Login
-</h2>
+<div className="brand-section">
+
+<div className="login-logo">
+⏰
+</div>
+
+
+<h1>
+CloseClock
+</h1>
+
+
+<p>
+Smart Productivity Manager
+</p>
+
+</div>
 
 
 
-<form onSubmit={login}>
-
+<div className="input-group">
 
 <input
 
 type="email"
 
-placeholder="Email"
+placeholder="Enter your email"
 
 value={email}
 
@@ -68,12 +81,11 @@ onChange={(e)=>setEmail(e.target.value)}
 
 
 
-
 <input
 
 type="password"
 
-placeholder="Password"
+placeholder="Enter your password"
 
 value={password}
 
@@ -82,9 +94,15 @@ onChange={(e)=>setPassword(e.target.value)}
 />
 
 
+</div>
 
 
-<button type="submit">
+
+
+<button 
+className="login-button"
+onClick={login}
+>
 
 Login
 
@@ -92,21 +110,15 @@ Login
 
 
 
-</form>
 
-
-
-<p>
+<p className="signup-text">
 
 Don't have an account?
 
-<button 
-onClick={()=>setShowSignup(true)}
->
+<span onClick={switchSignup}>
+ Sign up
+</span>
 
-Signup
-
-</button>
 
 </p>
 
@@ -114,6 +126,8 @@ Signup
 
 </div>
 
+
+</div>
 
 );
 

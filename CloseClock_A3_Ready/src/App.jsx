@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import {
+  onAuthStateChanged,
+  signOut
+} from "firebase/auth";
 
 import { auth } from "./firebase";
 
@@ -16,9 +19,14 @@ import "./App.css";
 function App(){
 
 
-const [user,setUser]=useState(null);
+const [user,setUser] = useState(null);
 
-const [showSignup,setShowSignup]=useState(false);
+const [showSignup,setShowSignup] = useState(false);
+
+const [loading,setLoading] = useState(true);
+
+const [ignoreAuth,setIgnoreAuth] = useState(false);
+
 
 
 
@@ -30,17 +38,33 @@ const unsubscribe = onAuthStateChanged(
 auth,
 (currentUser)=>{
 
-setUser(currentUser);
+
+if(ignoreAuth){
+
+setUser(null);
+
+setLoading(false);
+
+return;
 
 }
 
-);
+
+
+setUser(currentUser);
+
+setLoading(false);
+
+
+});
 
 
 return ()=>unsubscribe();
 
 
-},[]);
+},[ignoreAuth]);
+
+
 
 
 
@@ -48,11 +72,28 @@ return ()=>unsubscribe();
 
 const logout = async()=>{
 
+
 await signOut(auth);
+
 
 setUser(null);
 
+setShowSignup(false);
+
+
 };
+
+
+
+
+
+
+if(loading){
+
+return <h2>Loading...</h2>;
+
+}
+
 
 
 
@@ -61,18 +102,39 @@ setUser(null);
 if(!user){
 
 
-return showSignup
+return (
 
-?
+showSignup ?
 
-<Signup setShowSignup={setShowSignup}/>
+
+<Signup
+
+setShowSignup={setShowSignup}
+
+setIgnoreAuth={setIgnoreAuth}
+
+/>
+
 
 :
 
-<Login setShowSignup={setShowSignup}/>
+<Login
+
+switchSignup={()=>setShowSignup(true)}
+
+setUser={setUser}
+
+/>
+
+
+);
 
 
 }
+
+
+
+
 
 
 

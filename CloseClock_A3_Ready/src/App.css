@@ -526,3 +526,306 @@ gap:15px;
 
 
 }
+.login-page{
+
+min-height:100vh;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+background:
+linear-gradient(
+135deg,
+#667eea,
+#764ba2
+);
+
+}
+
+
+.login-card{
+
+width:380px;
+
+padding:40px;
+
+background:white;
+
+border-radius:25px;
+
+text-align:center;
+
+box-shadow:
+0 20px 40px rgba(0,0,0,0.15);
+
+}
+
+
+
+.login-logo{
+
+font-size:50px;
+
+}
+
+
+
+.login-card h1{
+
+font-size:36px;
+
+margin:10px 0;
+
+color:#1e293b;
+
+}
+
+
+
+.login-subtitle{
+
+color:#64748b;
+
+margin-bottom:25px;
+
+}
+
+
+
+.login-card input{
+
+width:100%;
+
+padding:14px;
+
+margin:10px 0;
+
+border-radius:10px;
+
+border:1px solid #ddd;
+
+font-size:15px;
+
+box-sizing:border-box;
+
+}
+
+
+
+.login-card button{
+
+width:100%;
+
+padding:14px;
+
+margin-top:15px;
+
+border:none;
+
+border-radius:10px;
+
+background:#2563eb;
+
+color:white;
+
+font-size:16px;
+
+cursor:pointer;
+
+}
+
+
+
+.login-card button:hover{
+
+background:#1d4ed8;
+
+}
+
+
+
+.signup-text{
+
+margin-top:20px;
+
+color:#64748b;
+
+}
+
+
+
+.signup-text span{
+
+color:#2563eb;
+
+cursor:pointer;
+
+font-weight:bold;
+
+}
+/* ================================
+   LOGIN PAGE FINAL DESIGN
+================================ */
+
+
+.login-page {
+
+min-height:100vh;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+background:
+linear-gradient(
+135deg,
+#667eea,
+#764ba2
+);
+
+}
+
+
+
+.login-card {
+
+width:380px;
+
+padding:45px;
+
+background:white;
+
+border-radius:25px;
+
+text-align:center;
+
+box-shadow:
+0 20px 40px rgba(0,0,0,0.15);
+
+}
+
+
+
+.login-logo {
+
+font-size:55px;
+
+margin-bottom:10px;
+
+}
+
+
+
+.brand-section h1 {
+
+font-size:38px;
+
+font-weight:900;
+
+color:#1e293b;
+
+margin:10px 0;
+
+}
+
+
+
+.brand-section p {
+
+color:#64748b;
+
+margin-bottom:30px;
+
+}
+
+
+
+.input-group input {
+
+width:100%;
+
+padding:14px;
+
+margin:10px 0;
+
+border-radius:12px;
+
+border:1px solid #ddd;
+
+font-size:15px;
+
+box-sizing:border-box;
+
+}
+
+
+
+.login-button {
+
+width:100%;
+
+padding:14px;
+
+margin-top:15px;
+
+border:none;
+
+border-radius:12px;
+
+background:
+
+linear-gradient(
+90deg,
+#2563eb,
+#6366f1
+);
+
+color:white;
+
+font-size:17px;
+
+font-weight:700;
+
+cursor:pointer;
+
+transition:.25s;
+
+}
+
+
+
+.login-button:hover {
+
+transform:translateY(-2px);
+
+box-shadow:
+0 8px 20px rgba(37,99,235,.25);
+
+}
+
+
+
+.signup-text {
+
+margin-top:25px;
+
+color:#64748b;
+
+}
+
+
+
+.signup-text span {
+
+color:#2563eb;
+
+font-weight:700;
+
+cursor:pointer;
+
+}

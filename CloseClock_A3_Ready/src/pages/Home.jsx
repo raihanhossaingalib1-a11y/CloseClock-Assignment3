@@ -16,23 +16,43 @@ import Navigation from "../components/Navigation";
 
 
 
-// ===============================
+
+// =================================
 // API CONNECTION
 // React -> FastAPI -> Supabase
-// ===============================
+// =================================
 
 
-async function apiRequest(path, options = {}) {
+async function apiRequest(
+path="",
+options={}
+){
 
 
-const token = await auth.currentUser?.getIdToken();
+try{
 
 
-if (!token) {
+const token = await auth.currentUser?.getIdToken(true);
 
-throw new Error("Please log in again.");
+
+
+console.log(
+"Firebase Token:",
+token
+);
+
+
+
+
+if(!token){
+
+throw new Error(
+"Firebase login token missing"
+);
 
 }
+
+
 
 
 
@@ -42,18 +62,27 @@ const response = await fetch(
 
 {
 
+
 ...options,
 
 
 headers:{
 
+
 "Content-Type":"application/json",
 
-"Authorization":`Bearer ${token}`,
 
-...options.headers,
+"Authorization":
+
+`Bearer ${token}`,
+
+
+...options.headers
+
 
 }
+
+
 
 }
 
@@ -61,29 +90,71 @@ headers:{
 
 
 
+
+
+
 const data = await response
+
 .json()
+
 .catch(()=>({}));
+
+
+
+
+
+console.log(
+"Backend Response:",
+data
+);
+
 
 
 
 
 if(!response.ok){
 
+
 throw new Error(
 
-data.detail || "Unable to contact the server"
+data.detail ||
+
+`Server error ${response.status}`
 
 );
 
+
 }
+
 
 
 
 return data;
 
 
+
 }
+
+
+catch(error){
+
+
+console.error(
+"API REQUEST ERROR:",
+error
+);
+
+
+throw error;
+
+
+}
+
+
+
+}
+
+
 
 
 
@@ -97,15 +168,21 @@ function Home({user, logout}) {
 
 const [tasks,setTasks] = useState([]);
 
+
 const [task,setTask] = useState("");
+
 
 const [priority,setPriority] = useState("Medium");
 
+
 const [category,setCategory] = useState("Study");
+
 
 const [deadline,setDeadline] = useState("");
 
+
 const [editingId,setEditingId] = useState(null);
+
 
 const [loading,setLoading] = useState(false);
 
@@ -114,9 +191,10 @@ const [loading,setLoading] = useState(false);
 
 
 
+
 const productivity =
 
-tasks.length === 0
+tasks.length===0
 
 ?
 
@@ -140,11 +218,11 @@ tasks.length
 
 )
 
-*
-
-100
+*100
 
 );
+
+
 
 
 
@@ -176,7 +254,23 @@ const loadTasks = async()=>{
 try{
 
 
+console.log(
+"Loading tasks..."
+);
+
+
+
+
 const data = await apiRequest("");
+
+
+
+console.log(
+"Tasks received:",
+data
+);
+
+
 
 
 setTasks(data);
@@ -185,18 +279,20 @@ setTasks(data);
 
 }
 
-
 catch(error){
 
 
-console.error(error);
+console.error(
+"LOAD TASK ERROR:",
+error
+);
+
 
 
 alert(
-
-"Unable to load tasks. Please try again."
-
+error.message
 );
+
 
 
 }
@@ -204,12 +300,9 @@ alert(
 
 
 };
-
-
-
-
-
-
+// ===============================
+// ADD TASK
+// ===============================
 
 
 const clearForm = ()=>{
@@ -234,7 +327,6 @@ setEditingId(null);
 
 
 
-
 const addTask = async()=>{
 
 
@@ -242,9 +334,7 @@ if(!task.trim()){
 
 
 alert(
-
 "Please enter a task name before submitting."
-
 );
 
 
@@ -252,8 +342,6 @@ return;
 
 
 }
-
-
 
 
 
@@ -272,9 +360,7 @@ const created = await apiRequest(
 
 method:"POST",
 
-
 body:JSON.stringify({
-
 
 text:task.trim(),
 
@@ -284,12 +370,9 @@ category,
 
 deadline:deadline || null
 
-
 })
 
-
 }
-
 
 );
 
@@ -317,7 +400,6 @@ clearForm();
 
 }
 
-
 catch(error){
 
 
@@ -325,18 +407,13 @@ console.error(error);
 
 
 alert(
-
 "Task could not be added: "
-
 +
-
 error.message
-
 );
 
 
 }
-
 
 finally{
 
@@ -355,6 +432,13 @@ setLoading(false);
 
 
 
+
+
+// ===============================
+// COMPLETE TASK
+// ===============================
+
+
 const completeTask = async(id)=>{
 
 
@@ -369,16 +453,13 @@ const changed = await apiRequest(
 
 method:"PATCH",
 
-
 body:JSON.stringify({
 
 completed:true
 
 })
 
-
 }
-
 
 );
 
@@ -412,18 +493,13 @@ item
 
 }
 
-
 catch(error){
 
 
 alert(
-
 "Unable to complete task: "
-
 +
-
 error.message
-
 );
 
 
@@ -437,7 +513,14 @@ error.message
 
 
 
+
+
+
+// ===============================
 // DELETE TASK
+// ===============================
+
+
 const deleteTask = async(id)=>{
 
 
@@ -458,6 +541,7 @@ method:"DELETE"
 
 
 
+
 setTasks(
 
 previous=>
@@ -471,19 +555,16 @@ item=>item.id!==id
 );
 
 
+
 }
 
 catch(error){
 
 
 alert(
-
 "Unable to delete task: "
-
 +
-
 error.message
-
 );
 
 
@@ -499,7 +580,11 @@ error.message
 
 
 
+
+// ===============================
 // EDIT TASK
+// ===============================
+
 
 const editTask = (item)=>{
 
@@ -528,7 +613,11 @@ item.deadline || ""
 
 
 
+
+// ===============================
 // UPDATE TASK
+// ===============================
+
 
 const updateTask = async()=>{
 
@@ -537,9 +626,7 @@ if(!task.trim()){
 
 
 alert(
-
 "Please enter a task name before updating."
-
 );
 
 
@@ -547,7 +634,6 @@ return;
 
 
 }
-
 
 
 
@@ -580,7 +666,6 @@ deadline:deadline || null
 
 }
 
-
 );
 
 
@@ -611,30 +696,23 @@ item
 
 
 
-
 clearForm();
 
 
 
 }
 
-
 catch(error){
 
 
 alert(
-
 "Unable to update task: "
-
 +
-
 error.message
-
 );
 
 
 }
-
 
 finally{
 
@@ -654,13 +732,13 @@ setLoading(false);
 
 
 
+
 return (
 
 <div 
 className="premium-dashboard-root"
 id="dashboard"
 >
-
 
 
 <Navigation
@@ -802,9 +880,7 @@ caption="Overall task completion performance"
 
 <DashboardCards
 
-
 tasks={tasks}
-
 
 />
 
@@ -820,22 +896,18 @@ tasks={tasks}
 
 
 
-
 <section 
 
 className="premium-analytics-panel"
 
 id="analytics"
 
-
 >
 
 
 <ProductivityAnalytics
 
-
 tasks={tasks}
-
 
 />
 
@@ -864,41 +936,24 @@ id="taskform"
 <TaskForm
 
 
-
 task={task}
-
 
 setTask={setTask}
 
 
-
-
-
 priority={priority}
-
 
 setPriority={setPriority}
 
 
-
-
-
 category={category}
-
 
 setCategory={setCategory}
 
 
-
-
-
 deadline={deadline}
 
-
 setDeadline={setDeadline}
-
-
-
 
 
 addTask={
@@ -916,9 +971,6 @@ addTask
 }
 
 
-
-
-
 isEditing={
 
 editingId !== null
@@ -926,14 +978,10 @@ editingId !== null
 }
 
 
-
-
-
 loading={loading}
 
 
 />
-
 
 
 
@@ -950,14 +998,11 @@ loading={loading}
 <section className="premium-tasklist-panel">
 
 
-
 <h2>
 
 Your Tasks
 
 </h2>
-
-
 
 
 
@@ -979,7 +1024,6 @@ tasks.length===0
 </h3>
 
 
-
 <p>
 
 Create your first task and start tracking your productivity journey.
@@ -991,12 +1035,9 @@ Create your first task and start tracking your productivity journey.
 
 
 
-
-
 :
 
 <div className="task-list">
-
 
 
 {
@@ -1004,36 +1045,27 @@ Create your first task and start tracking your productivity journey.
 tasks.map(item=>(
 
 
-
 <TaskCard
 
 
 key={item.id}
 
-
 item={item}
-
 
 
 completeTask={completeTask}
 
-
 deleteTask={deleteTask}
 
-
 editTask={editTask}
-
 
 
 />
 
 
-
 ))
 
-
 }
-
 
 
 
@@ -1042,8 +1074,6 @@ editTask={editTask}
 
 
 }
-
-
 
 
 
@@ -1066,22 +1096,15 @@ editTask={editTask}
 
 
 
-
 <aside className="premium-sidecar">
-
-
 
 
 
 <UpcomingDeadlines
 
-
 tasks={tasks}
 
-
 />
-
-
 
 
 
@@ -1091,11 +1114,7 @@ tasks={tasks}
 
 
 
-
-
 <Timer />
-
-
 
 
 
@@ -1120,7 +1139,6 @@ tasks={tasks}
 
 
 }
-
 
 
 export default Home;
