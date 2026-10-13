@@ -25,7 +25,6 @@ const [showSignup,setShowSignup] = useState(false);
 
 const [loading,setLoading] = useState(true);
 
-const [ignoreAuth,setIgnoreAuth] = useState(false);
 
 
 
@@ -35,20 +34,10 @@ useEffect(()=>{
 
 
 const unsubscribe = onAuthStateChanged(
+
 auth,
+
 (currentUser)=>{
-
-
-if(ignoreAuth){
-
-setUser(null);
-
-setLoading(false);
-
-return;
-
-}
-
 
 
 setUser(currentUser);
@@ -56,13 +45,19 @@ setUser(currentUser);
 setLoading(false);
 
 
-});
+}
+
+);
+
 
 
 return ()=>unsubscribe();
 
 
-},[ignoreAuth]);
+
+},[]);
+
+
 
 
 
@@ -75,13 +70,15 @@ const logout = async()=>{
 
 await signOut(auth);
 
-
 setUser(null);
 
 setShowSignup(false);
 
 
 };
+
+
+
 
 
 
@@ -99,24 +96,27 @@ return <h2>Loading...</h2>;
 
 
 
+
+
+
 if(!user){
 
 
-return (
+return showSignup ?
 
-showSignup ?
 
 
 <Signup
 
 setShowSignup={setShowSignup}
 
-setIgnoreAuth={setIgnoreAuth}
-
 />
 
 
+
 :
+
+
 
 <Login
 
@@ -127,10 +127,11 @@ setUser={setUser}
 />
 
 
-);
-
+;
 
 }
+
+
 
 
 
@@ -151,7 +152,9 @@ logout={logout}
 );
 
 
+
 }
+
 
 
 export default App;

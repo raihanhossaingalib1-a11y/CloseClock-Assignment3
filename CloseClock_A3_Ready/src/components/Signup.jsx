@@ -3,21 +3,24 @@ import { useState } from "react";
 import { auth } from "../firebase";
 
 import {
-createUserWithEmailAndPassword,
-signOut
+createUserWithEmailAndPassword
 } from "firebase/auth";
 
 
 
 function Signup({
-setShowSignup,
-setSkipAuth
-}){
+
+setShowSignup
+
+}) {
+
 
 
 const [email,setEmail]=useState("");
 
 const [password,setPassword]=useState("");
+
+
 
 
 
@@ -30,26 +33,26 @@ try{
 
 
 await createUserWithEmailAndPassword(
+
 auth,
+
 email,
+
 password
+
 );
 
 
 
-// logout immediately
-
-await signOut(auth);
 
 
-
-// stop Firebase auto redirect
-
-setSkipAuth(true);
+alert(
+"Account created successfully."
+);
 
 
 
-// move login page
+// go login page
 
 setShowSignup(false);
 
@@ -61,22 +64,22 @@ setPassword("");
 
 
 
-alert(
-"Account created successfully. Please login."
-);
-
-
-
 }
+
 
 catch(error){
 
+
 alert(error.message);
+
 
 }
 
 
+
 };
+
+
 
 
 
@@ -92,18 +95,25 @@ return (
 
 
 <div className="login-logo">
+
 ⏰
+
 </div>
 
 
 <h1>
+
 Create Account
+
 </h1>
 
 
 <p className="login-subtitle">
+
 Join CloseClock and manage your productivity.
+
 </p>
+
 
 
 
@@ -123,6 +133,7 @@ onChange={(e)=>setEmail(e.target.value)}
 
 
 
+
 <input
 
 type="password"
@@ -134,6 +145,7 @@ value={password}
 onChange={(e)=>setPassword(e.target.value)}
 
 />
+
 
 
 
@@ -160,7 +172,9 @@ Already have an account?
 
 
 <span
+
 onClick={()=>setShowSignup(false)}
+
 >
 
 Login
@@ -171,6 +185,7 @@ Login
 </p>
 
 
+
 </div>
 
 </div>
@@ -179,7 +194,9 @@ Login
 );
 
 
+
 }
+
 
 
 export default Signup;

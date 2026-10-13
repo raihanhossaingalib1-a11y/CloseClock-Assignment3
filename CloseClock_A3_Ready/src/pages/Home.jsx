@@ -32,7 +32,44 @@ options={}
 try{
 
 
-const token = await auth.currentUser?.getIdToken(true);
+let currentUser = auth.currentUser;
+
+
+
+// wait for Firebase session restoration
+
+if(!currentUser){
+
+
+await new Promise(
+resolve=>setTimeout(resolve,1000)
+);
+
+
+currentUser = auth.currentUser;
+
+
+}
+
+
+
+
+
+if(!currentUser){
+
+
+throw new Error(
+"Firebase login token missing"
+);
+
+
+}
+
+
+
+
+
+const token = await currentUser.getIdToken(true);
 
 
 
@@ -41,16 +78,6 @@ console.log(
 token
 );
 
-
-
-
-if(!token){
-
-throw new Error(
-"Firebase login token missing"
-);
-
-}
 
 
 
@@ -83,8 +110,8 @@ headers:{
 }
 
 
-
 }
+
 
 );
 
@@ -112,6 +139,7 @@ data
 
 
 
+
 if(!response.ok){
 
 
@@ -119,12 +147,13 @@ throw new Error(
 
 data.detail ||
 
-`Server error ${response.status}`
+`Server Error ${response.status}`
 
 );
 
 
 }
+
 
 
 
@@ -135,12 +164,11 @@ return data;
 
 }
 
-
 catch(error){
 
 
 console.error(
-"API REQUEST ERROR:",
+"API ERROR:",
 error
 );
 
@@ -229,18 +257,30 @@ tasks.length
 
 
 
-
 useEffect(()=>{
 
 
 if(user){
 
+
+const timer = setTimeout(()=>{
+
+
 loadTasks();
+
+
+},1500);
+
+
+
+return ()=>clearTimeout(timer);
+
 
 }
 
 
 },[user]);
+
 
 
 
@@ -255,7 +295,7 @@ try{
 
 
 console.log(
-"Loading tasks..."
+"Loading Tasks..."
 );
 
 
@@ -265,10 +305,12 @@ const data = await apiRequest("");
 
 
 
+
 console.log(
-"Tasks received:",
+"Tasks:",
 data
 );
+
 
 
 
@@ -283,7 +325,6 @@ catch(error){
 
 
 console.error(
-"LOAD TASK ERROR:",
 error
 );
 
@@ -300,9 +341,13 @@ error.message
 
 
 };
-// ===============================
-// ADD TASK
-// ===============================
+
+
+
+
+
+
+
 
 
 const clearForm = ()=>{
@@ -320,6 +365,7 @@ setEditingId(null);
 
 
 };
+
 
 
 
@@ -345,6 +391,7 @@ return;
 
 
 
+
 try{
 
 
@@ -358,7 +405,9 @@ const created = await apiRequest(
 
 {
 
+
 method:"POST",
+
 
 body:JSON.stringify({
 
@@ -370,9 +419,12 @@ category,
 
 deadline:deadline || null
 
+
 })
 
+
 }
+
 
 );
 
@@ -400,20 +452,23 @@ clearForm();
 
 }
 
+
 catch(error){
 
 
-console.error(error);
-
-
 alert(
+
 "Task could not be added: "
+
 +
+
 error.message
+
 );
 
 
 }
+
 
 finally{
 
@@ -425,15 +480,6 @@ setLoading(false);
 
 
 };
-
-
-
-
-
-
-
-
-
 // ===============================
 // COMPLETE TASK
 // ===============================
@@ -493,13 +539,18 @@ item
 
 }
 
+
 catch(error){
 
 
 alert(
+
 "Unable to complete task: "
+
 +
+
 error.message
+
 );
 
 
@@ -542,6 +593,7 @@ method:"DELETE"
 
 
 
+
 setTasks(
 
 previous=>
@@ -558,17 +610,23 @@ item=>item.id!==id
 
 }
 
+
 catch(error){
 
 
 alert(
+
 "Unable to delete task: "
+
 +
+
 error.message
+
 );
 
 
 }
+
 
 
 };
@@ -650,7 +708,9 @@ const changed = await apiRequest(
 
 {
 
+
 method:"PATCH",
+
 
 body:JSON.stringify({
 
@@ -663,6 +723,7 @@ category,
 deadline:deadline || null
 
 })
+
 
 }
 
@@ -696,6 +757,7 @@ item
 
 
 
+
 clearForm();
 
 
@@ -706,9 +768,13 @@ catch(error){
 
 
 alert(
+
 "Unable to update task: "
+
 +
+
 error.message
+
 );
 
 
@@ -735,10 +801,14 @@ setLoading(false);
 
 return (
 
-<div 
+<div
+
 className="premium-dashboard-root"
+
 id="dashboard"
+
 >
+
 
 
 <Navigation
@@ -748,6 +818,7 @@ user={user}
 onLogout={logout}
 
 />
+
 
 
 
@@ -768,6 +839,7 @@ Welcome back
 
 
 </h1>
+
 
 
 
@@ -794,6 +866,7 @@ and achieve your goals efficiently.
 
 
 
+
 <a
 
 href="#taskform"
@@ -809,6 +882,7 @@ className="hero-cta"
 
 
 </div>
+
 
 
 
@@ -845,7 +919,6 @@ className="hero-cta"
 
 
 <div className="premium-maincol">
-
 
 
 
@@ -896,7 +969,7 @@ tasks={tasks}
 
 
 
-<section 
+<section
 
 className="premium-analytics-panel"
 
@@ -930,7 +1003,6 @@ className="premium-form-panel"
 id="taskform"
 
 >
-
 
 
 <TaskForm
@@ -998,6 +1070,7 @@ loading={loading}
 <section className="premium-tasklist-panel">
 
 
+
 <h2>
 
 Your Tasks
@@ -1037,6 +1110,7 @@ Create your first task and start tracking your productivity journey.
 
 :
 
+
 <div className="task-list">
 
 
@@ -1064,6 +1138,7 @@ editTask={editTask}
 
 
 ))
+
 
 }
 
@@ -1109,7 +1184,9 @@ tasks={tasks}
 
 
 
+
 <Calendar />
+
 
 
 
@@ -1139,6 +1216,7 @@ tasks={tasks}
 
 
 }
+
 
 
 export default Home;
