@@ -5,10 +5,14 @@ function UpcomingDeadlines({tasks}){
 
 
 const upcomingTasks = tasks
-.filter(task=>task.deadline)
+.filter(
+    task =>
+        task.deadline &&
+        !task.completed
+)
 .sort(
-(a,b)=>
-new Date(a.deadline)-new Date(b.deadline)
+    (a,b)=>
+        new Date(a.deadline)-new Date(b.deadline)
 )
 .slice(0,5);
 
@@ -26,7 +30,6 @@ Upcoming Deadlines
 
 
 {
-
 upcomingTasks.length===0 ?
 
 <p>
