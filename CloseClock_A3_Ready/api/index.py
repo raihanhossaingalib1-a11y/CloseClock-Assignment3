@@ -287,4 +287,4 @@ async def remove_task(
     )
 
     return None
-    
+handler = app
